@@ -1,23 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8"></meta>
+  <meta charset="utf-8"></meta>
   <title>options</title>
 </head>
 <body>
-	<b>Placeholders: </b>
-		%u := url, 
-		%t :=  title, 
-		%i :=  tab index, 
-		%bn :=  browser name, 
-		%bv :=  browser version, 
-		%po :=  platform os, 
-		%pa :=  platform arch, 
-		%d :=  timestamp (YYYY-MM-DD HH:MM:SS)
-		<br/>
-		Example: &lt;a href="%u"&gt;%t&lt;/a&gt;
-	<textarea type="textarea"   id="formatstr" style="height:20em;" ></textarea>
-
+  <b>Placeholders: </b>
+  %url,%title,%active,%favIconUrl
+  <br/>
+  More: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/Tab
+  <textarea type="textarea"   id="formatstr" style="height:20em;" ></textarea>
   <script src="options.js"></script>
 </body>
 </html>

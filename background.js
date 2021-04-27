@@ -38,26 +38,48 @@ browser.browserAction.onClicked.addListener(async (tab) => {
 
 	tmp = typeof tmp[id] === 'string'? tmp[id]: "";
 
+	tmp = tmp.trim();
+
 	//console.log(tmp);
+	//
+	if( tmp === "") {
+		tmp = "%title - %url\n"
+	}
 
 	//
 	// 2. replace placeholders 
 	//
-	const browserInfo = await browser.runtime.getBrowserInfo();
-	const platformInfo = await browser.runtime.getPlatformInfo();
-	const replacers = {
-		"u": () => tab.url
-		,"t": () => tab.title
-		,"i": () => tab.index
-		,"bn": () => browserInfo.name
-		,"bv": () => browserInfo.version
-		,"po": () => platformInfo.os
-		,"pa": () => platformInfo.arch
-		,"d": getTimeStampStr 
-	}
+	const replacers = [
+		 "active"
+		,"attention"
+		,"audible"
+		,"autoDiscardable"
+		,"cookieStoreId"
+		,"discarded"
+		,"favIconUrl"
+		,"height"
+		,"hidden"
+		,"highlighted"
+		,"id"
+		,"incognito"
+		,"index"
+		,"isArticle"
+		,"isInReaderMode"
+		,"lastAccessed"
+		,"openerTabId"
+		,"pinned"
+		,"sessionId"
+		,"status"
+		,"successorTabId"
+		,"title"
+		,"width"
+		,"windowId"
+	        ,"url"
+	];
 
-	for (const p in replacers) {
-		tmp = tmp.replaceAll("%"+p, replacers[p]());
+	for (const p of replacers) {
+		//console.log(p);
+		tmp = tmp.replaceAll("%"+p, (typeof tab[p] !== 'undefined'? tab[p] : "n/a"));
 	}
 	//
 	// 3. copy text to clipboard
