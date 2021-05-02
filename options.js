@@ -21,6 +21,7 @@ async function copyAllTabs() {
 	browser.notifications.create(extname + (new Date()).toString(), {
 		"type": "basic",
 		"title": 'copyTabInfo', 
+		"iconUrl": browser.runtime.getURL("icon.png"),
 		"message":  'copied the current window tabs information into the clipboard' 
 	});
 }
@@ -32,6 +33,7 @@ async function copyTab() {
 	browser.notifications.create(extname + (new Date()).toString(), {
 		"type": "basic",
 		"title": 'copyTabInfo', 
+		"iconUrl": browser.runtime.getURL("icon.png"),
 		"message":  'copied the active tab information into the clipboard' 
 	});
 }
@@ -83,9 +85,6 @@ async function tabinfo2clip(tabs) {
 
 	// 3. copy text to clipboard
 	navigator.clipboard.writeText(out);
-
-	// 4. notify user 
-
 }
 
 function deleteRow(rowTr) {
