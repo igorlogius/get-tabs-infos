@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8"></meta>
-  <title>options</title>
+	<meta charset="utf-8"></meta>
+  	<title>settings</title>
 </head>
 <body>
-  <b>Placeholders: </b>
-  %url,%title,%active,%favIconUrl
-  <br/>
-  More: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/Tab
-  <textarea type="textarea"   id="formatstr" style="height:20em;" ></textarea>
+	<center>
+	<form id="mainForm" accept-charset="utf-8" style="width:100%;">
+		<input type="submit" value="Save All Changes" />
+		<input type="button" value="Copy ActiveTab Info" id="btnCopyAllTabs" />
+		<input type="button" value="Copy AllTabs Info"  id="btnCopyTab" />
+		<!--input id="impbtn_wrapper" type="button" name="impbtn" value="Import" />
+		<input id="impbtn" type="file" name="impbtn" value="" style="display:none;" />
+		<input id="expbtn" type="button" name="impbtn" value="Export" /-->
+		<table id="mainTable" border=1 style="width:100%;text-align:left;" >
+			<thead>
+				<th>Choose Active</th>
+				<th>Format String<br/>(Placeholders: %url,%title,<a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/Tab">more</a>)</th>
+				<th>Actions</th>
+			</thead>
+			<tbody id='mainTableBody' />
+		</table>
+			<div>
+	</form>
+	</center>
   <script src="options.js"></script>
 </body>
 </html>

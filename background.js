@@ -30,11 +30,13 @@ function getTimeStampStr() {
 	return ts.trim();
 }
 
-browser.browserAction.onClicked.addListener(async (tab) => {
+//browser.browserAction.onClicked.addListener();
+async function onClicked(atab,clickData, button) {
 	// 1. get the format string from storage
 	
-	const id = "formatstr"
-	let tmp = await browser.storage.local.get(id);
+
+	const store = await browser.storage.local.get('placeholder_urls');
+	//store.placeholder_urls.forEach( async (val) => {
 
 	tmp = typeof tmp[id] === 'string'? tmp[id]: "";
 
@@ -77,13 +79,40 @@ browser.browserAction.onClicked.addListener(async (tab) => {
 	        ,"url"
 	];
 
-	for (const p of replacers) {
-		//console.log(p);
-		tmp = tmp.replaceAll("%"+p, (typeof tab[p] !== 'undefined'? tab[p] : "n/a"));
+	let out = "";
+
+	let tmp2 = "";
+
+	if (clickData.modifiers.includes('Ctrl')) {
+
+		const tabs = await browser.tabs.query({});
+
+		for(let tab of tabs) {
+			tmp2 = tmp;
+			for (const p of replacers) {
+				//console.log(p);
+				tmp2 = tmp2.replaceAll("%"+p, (typeof tab[p] !== 'undefined'? tab[p] : "not available"));
+			}
+			out = out + tmp2 + '\n';
+		}
+
+	}else{
+		tmp2 = tmp;
+		for (const p of replacers) {
+			//console.log(p);
+			tmp2 = tmp2.replaceAll("%"+p, (typeof atab[p] !== 'undefined'? atab[p] : "not available"));
+		}
+		out = out + tmp2 + '\n';
 	}
 	//
 	// 3. copy text to clipboard
-	//const text = tmp; //`<a href="${tab.url}">${tab.title}</a>`;
-	//console.log(text);
-	navigator.clipboard.writeText(tmp);
-});
+	navigator.clipboard.writeText(out);
+
+	// 4. notify user 
+	browser.notifications.create(extname + (new Date()).toString(), {
+		"type": "basic",
+		"title": 'copyTabInfo', 
+		"message":  'copied tabinfo in clipboard' 
+	});
+
+}

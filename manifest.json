@@ -1,12 +1,8 @@
 {
   "author": "igorlogius",
-  "background": {
-    "scripts": [
-      "background.js"
-    ]
-  },
   "browser_action": {
-	  "default_title": "copy tab info"
+	  "default_title": "copy tab information in a custom format",
+	  "default_popup": "options.html"
   },
   "description": "",
   "icons": {
@@ -14,13 +10,11 @@
   },
   "manifest_version": 2,
   "name": "copyTabInfo",
-  "options_ui": {
-    "page": "options.html"
-  },
   "permissions": [
     "clipboardWrite",
-    "activeTab",
-    "storage"
+    "notifications",
+    "storage",
+    "tabs"
   ],
-  "version": "0.1.2"
+  "version": "0.2.2"
 }
