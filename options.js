@@ -16,12 +16,24 @@ async function getActivPlaceholderStr() {
 
 async function copyAllTabs() {
 	const tabs = await browser.tabs.query({currentWindow:true});
-	tabinfo2clip(tabs);
+	await tabinfo2clip(tabs);
+
+	browser.notifications.create(extname + (new Date()).toString(), {
+		"type": "basic",
+		"title": 'copyTabInfo', 
+		"message":  'copied the current window tabs information into the clipboard' 
+	});
 }
 
 async function copyTab() {
 	const tabs = await browser.tabs.query({active: true, currentWindow:true});
-	tabinfo2clip(tabs);
+	await tabinfo2clip(tabs);
+
+	browser.notifications.create(extname + (new Date()).toString(), {
+		"type": "basic",
+		"title": 'copyTabInfo', 
+		"message":  'copied the active tab information into the clipboard' 
+	});
 }
 async function tabinfo2clip(tabs) {
 
@@ -73,11 +85,6 @@ async function tabinfo2clip(tabs) {
 	navigator.clipboard.writeText(out);
 
 	// 4. notify user 
-	browser.notifications.create(extname + (new Date()).toString(), {
-		"type": "basic",
-		"title": 'copyTabInfo', 
-		"message":  'copied tabinfo in clipboard' 
-	});
 
 }
 
@@ -216,6 +223,7 @@ async function restoreOptions() {
 				'action' : ''
 			}
 		]
+		await browser.storage.local.set({ 'placeholder_urls': res.placeholder_urls });
 	}
 	res.placeholder_urls.forEach( (selector) => {
 		selector.action = 'delete'
