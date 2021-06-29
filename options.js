@@ -15,7 +15,10 @@ async function getActivPlaceholderStr() {
 }
 
 async function copyAllTabs() {
-	const tabs = await browser.tabs.query({currentWindow:true});
+	const tabs = await browser.tabs.query({
+		currentWindow:true, 
+		hidden:false
+	});
 	await tabinfo2clip(tabs);
 
 	browser.notifications.create(extname + (new Date()).toString(), {
