@@ -29,6 +29,21 @@ async function copyAllTabs() {
 	});
 }
 
+
+async function copySelectedTabs() {
+	const tabs = await browser.tabs.query({
+		highlighted: true
+	});
+	await tabinfo2clip(tabs);
+
+	browser.notifications.create(extname + (new Date()).toString(), {
+		"type": "basic",
+		"title": extname, 
+		"iconUrl": browser.runtime.getURL("icon.png"),
+		"message":  'copied the selected tabs information into the clipboard' 
+	});
+}
+
 async function copyTab() {
 	const tabs = await browser.tabs.query({active: true, currentWindow:true});
 	await tabinfo2clip(tabs);
@@ -239,6 +254,7 @@ document.querySelector("form").addEventListener("submit", saveOptions);
 
 document.querySelector("#btnCopyTab").addEventListener("click", copyTab);
 document.querySelector("#btnCopyAllTabs").addEventListener("click", copyAllTabs);
+document.querySelector("#btnCopySelectedTabs").addEventListener("click", copySelectedTabs);
 
 /*
 const impbtnWrp = document.getElementById('impbtn_wrapper');
