@@ -23,7 +23,7 @@ async function copyAllTabs() {
 
 	browser.notifications.create(extname + (new Date()).toString(), {
 		"type": "basic",
-		"title": 'copyTabInfo', 
+		"title": extname, 
 		"iconUrl": browser.runtime.getURL("icon.png"),
 		"message":  'copied the current window tabs information into the clipboard' 
 	});
@@ -35,7 +35,7 @@ async function copyTab() {
 
 	browser.notifications.create(extname + (new Date()).toString(), {
 		"type": "basic",
-		"title": 'copyTabInfo', 
+		"title": extname, 
 		"iconUrl": browser.runtime.getURL("icon.png"),
 		"message":  'copied the active tab information into the clipboard' 
 	});

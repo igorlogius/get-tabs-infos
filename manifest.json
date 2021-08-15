@@ -9,12 +9,12 @@
 	  "128": "icon.png"
   },
   "manifest_version": 2,
-  "name": "copyTabInfo",
+  "name": "copytabinfo",
   "permissions": [
     "clipboardWrite",
     "notifications",
     "storage",
     "tabs"
   ],
-  "version": "0.2.5"
+  "version": "1.2.6"
 }
