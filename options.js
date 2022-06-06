@@ -1,5 +1,6 @@
+/* global browser */
 
-const temporary = browser.runtime.id.endsWith('@temporary-addon'); 
+//const temporary = browser.runtime.id.endsWith('@temporary-addon');
 const manifest = browser.runtime.getManifest();
 const extname = manifest.name;
 
@@ -16,16 +17,16 @@ async function getActivPlaceholderStr() {
 
 async function copyAllTabs() {
 	const tabs = await browser.tabs.query({
-		currentWindow:true, 
+		currentWindow:true,
 		hidden:false
 	});
 	await tabinfo2clip(tabs);
 
 	browser.notifications.create(extname + (new Date()).toString(), {
 		"type": "basic",
-		"title": extname, 
+		"title": extname,
 		"iconUrl": browser.runtime.getURL("icon.png"),
-		"message":  'copied the current window tabs information into the clipboard' 
+		"message":  'copied the current window tabs information into the clipboard'
 	});
 }
 
@@ -38,9 +39,9 @@ async function copySelectedTabs() {
 
 	browser.notifications.create(extname + (new Date()).toString(), {
 		"type": "basic",
-		"title": extname, 
+		"title": extname,
 		"iconUrl": browser.runtime.getURL("icon.png"),
-		"message":  'copied the selected tabs information into the clipboard' 
+		"message":  'copied the selected tabs information into the clipboard'
 	});
 }
 
@@ -50,19 +51,19 @@ async function copyTab() {
 
 	browser.notifications.create(extname + (new Date()).toString(), {
 		"type": "basic",
-		"title": extname, 
+		"title": extname,
 		"iconUrl": browser.runtime.getURL("icon.png"),
-		"message":  'copied the active tab information into the clipboard' 
+		"message":  'copied the active tab information into the clipboard'
 	});
 }
 async function tabinfo2clip(tabs) {
 
 	// 1. get the format string from storage
 	const tmp = await getActivPlaceholderStr();
-	
-	// 2. replace placeholders 
+
+	// 2. replace placeholders
 	const replacers = [
-		 "active"
+        "active"
 		,"attention"
 		,"audible"
 		,"autoDiscardable"
@@ -86,7 +87,7 @@ async function tabinfo2clip(tabs) {
 		,"title"
 		,"width"
 		,"windowId"
-	        ,"url"
+        ,"url"
 	];
 
 	let out = "";
@@ -114,11 +115,13 @@ function createTableRow(feed) {
 	var mainTableBody = document.getElementById('mainTableBody');
 	var tr = mainTableBody.insertRow();
 
+    var input;
+
 	Object.keys(feed).sort().forEach( (key) => {
 
 		if( key === 'activ'){
 			//if(feed[key] !== null) {
-				var input = document.createElement('input');
+				input = document.createElement('input');
 				input.className = key;
 				input.placeholder = key;
 				input.style.width = '100%';
@@ -133,7 +136,7 @@ function createTableRow(feed) {
 
 		}else if( key === 'name'){
 			//var input = document.createElement('textarea');
-			var input = document.createElement('input');
+			input = document.createElement('input');
 			input.className = key;
 			input.placeholder = "%title - %url";
 			input.style.float = 'right';
@@ -143,7 +146,7 @@ function createTableRow(feed) {
 			tr.insertCell().appendChild(input);
 		}else
 			if( key !== 'action'){
-				var input = document.createElement('input');
+				input = document.createElement('input');
 				input.className = key;
 				input.placeholder = key;
 				input.style.width = '0px';
@@ -170,7 +173,7 @@ function collectConfig() {
 	// collect configuration from DOM
 	var mainTableBody = document.getElementById('mainTableBody');
 	var feeds = [];
-	for (var row = 0; row < mainTableBody.rows.length; row++) { 
+	for (var row = 0; row < mainTableBody.rows.length; row++) {
 		try {
 			var name = mainTableBody.rows[row].querySelector('.name').value;
 			try {
@@ -209,20 +212,20 @@ function createButton(text, id, callback, submit) {
 	return span;
 }
 
-async function saveOptions(e) {
+async function saveOptions(/*e*/) {
 	var feeds = collectConfig();
 	await browser.storage.local.set({ 'placeholder_urls': feeds });
 }
 
 async function restoreOptions() {
-	var mainTableBody = document.getElementById('mainTableBody');
+	//var mainTableBody = document.getElementById('mainTableBody');
 	createTableRow({
 		'activ': null,
 		'name': '' ,
 		'action':'save'
 	});
 	var res = await browser.storage.local.get('placeholder_urls');
-	if ( !Array.isArray(res.placeholder_urls) ) { 
+	if ( !Array.isArray(res.placeholder_urls) ) {
 		res.placeholder_urls = [
 			{
 				'activ': true,
@@ -285,11 +288,11 @@ impbtnWrp.addEventListener('click', function(evt) {
 impbtn.addEventListener('input', function (evt) {
 
 	console.log('impbtn');
-	
+
 	var file  = this.files[0];
 
 	//console.log(file.name);
-	
+
 	var reader = new FileReader();
 	        reader.onload = async function(e) {
             try {
