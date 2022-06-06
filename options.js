@@ -1,8 +1,8 @@
 /* global browser */
 
 //const temporary = browser.runtime.id.endsWith('@temporary-addon');
-const manifest = browser.runtime.getManifest();
-const extname = manifest.name;
+//const manifest = browser.runtime.getManifest();
+//const extname = manifest.name;
 
 async function getActivPlaceholderStr() {
 	const store = await browser.storage.local.get('placeholder_urls');
@@ -15,48 +15,33 @@ async function getActivPlaceholderStr() {
 	return "n/a";
 }
 
-async function copyAllTabs() {
-	const tabs = await browser.tabs.query({
+function getAllTabs() {
+	tabinfo2clip({
+        url: "<all_urls>",
+        hidden: false,
 		currentWindow:true,
-		hidden:false
-	});
-	await tabinfo2clip(tabs);
-
-	browser.notifications.create(extname + (new Date()).toString(), {
-		"type": "basic",
-		"title": extname,
-		"iconUrl": browser.runtime.getURL("icon.png"),
-		"message":  'copied the current window tabs information into the clipboard'
 	});
 }
 
 
-async function copySelectedTabs() {
-	const tabs = await browser.tabs.query({
-		highlighted: true
-	});
-	await tabinfo2clip(tabs);
-
-	browser.notifications.create(extname + (new Date()).toString(), {
-		"type": "basic",
-		"title": extname,
-		"iconUrl": browser.runtime.getURL("icon.png"),
-		"message":  'copied the selected tabs information into the clipboard'
+function getSelectedTabs() {
+	tabinfo2clip({
+        url: "<all_urls>",
+        hidden: false,
+        currentWindow:true,
+		highlighted: true,
 	});
 }
 
-async function copyTab() {
-	const tabs = await browser.tabs.query({active: true, currentWindow:true});
-	await tabinfo2clip(tabs);
-
-	browser.notifications.create(extname + (new Date()).toString(), {
-		"type": "basic",
-		"title": extname,
-		"iconUrl": browser.runtime.getURL("icon.png"),
-		"message":  'copied the active tab information into the clipboard'
-	});
+function getActiveTab() {
+	tabinfo2clip({
+        url: "<all_urls>",
+        hidden: false,
+        currentWindow:true,
+        active: true,
+    });
 }
-async function tabinfo2clip(tabs) {
+async function tabinfo2clip(queryObject) {
 
 	// 1. get the format string from storage
 	const tmp = await getActivPlaceholderStr();
@@ -94,16 +79,17 @@ async function tabinfo2clip(tabs) {
 
 	let tmp2 = "";
 
+	const tabs = await browser.tabs.query(queryObject);
 	for(const tab of tabs) {
 		tmp2 = tmp;
 		for (const p of replacers) {
 			tmp2 = tmp2.replaceAll("%"+p, (typeof tab[p] !== 'undefined'? tab[p] : "n/a"));
 		}
-		out = out + tmp2 + '\n';
+		out = out + tmp2 + '\r\n';
 	}
 
-	// 3. copy text to clipboard
-	navigator.clipboard.writeText(out);
+	// 3. write infos to textarea
+    document.querySelector("#output").value = out;
 }
 
 function deleteRow(rowTr) {
@@ -139,10 +125,14 @@ function createTableRow(feed) {
 			input = document.createElement('input');
 			input.className = key;
 			input.placeholder = "%title - %url";
-			input.style.float = 'right';
-			input.style.width = '90%';
-			input.style.margin = '3px';
+			//input.style.float = 'right';
+			input.style.width = '99%';
+			//input.style.width = '90%';
+			//input.style.margin = '3px';
 			input.value = feed[key];
+            if(feed.action !== 'save'){
+                input.disabled = true;
+            }
 			tr.insertCell().appendChild(input);
 		}else
 			if( key !== 'action'){
@@ -157,14 +147,9 @@ function createTableRow(feed) {
 
 	var button;
 	if(feed.action === 'save'){
-		button = createButton("Create", "saveButton", function() {},  true);
-		//tr.insertCell().appendChild(button);
+		button = createButton("Create", "saveButton", function() { saveOptions(); window.close(); },  true);
 	}else{
-		button = createButton("Delete", "deleteButton", function() { deleteRow(tr); }, true );
-		//var button2 = createButton("CopyTab", "copyButton", copyTab, false );
-		//button.parentNode.insertBefore(button2,button);
-		//button2 = createButton("CopyAllTabs", "copyAllButton", copyAllTabs, false );
-		//button.parentNode.insertBefore(button2,button);
+		button = createButton("Delete", "deleteButton", function() { deleteRow(tr); saveOptions(); window.close(); }, true );
 	}
 	tr.insertCell().appendChild(button);
 }
@@ -229,12 +214,12 @@ async function restoreOptions() {
 		res.placeholder_urls = [
 			{
 				'activ': true,
-				'name': 'Plaintext: %title - %url' ,
+				'name': 'Text: %title - %url' ,
 				'action' : ''
 			},
 			{
 				'activ': false,
-				'name': 'HTML: <a href="%url">%title</a>' ,
+				'name': 'HTML Link: <a href="%url">%title</a>' ,
 				'action' : ''
 			},
 			{
@@ -252,59 +237,10 @@ async function restoreOptions() {
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
-document.querySelector("form").addEventListener("submit", saveOptions);
+//document.querySelector("form").addEventListener("submit", saveOptions);
 
 
-document.querySelector("#btnCopyTab").addEventListener("click", copyTab);
-document.querySelector("#btnCopyAllTabs").addEventListener("click", copyAllTabs);
-document.querySelector("#btnCopySelectedTabs").addEventListener("click", copySelectedTabs);
+document.querySelector("#btnActiveTab").addEventListener("click", getActiveTab);
+document.querySelector("#btnAllTabs").addEventListener("click", getAllTabs);
+document.querySelector("#btnSelectedTabs").addEventListener("click", getSelectedTabs);
 
-/*
-const impbtnWrp = document.getElementById('impbtn_wrapper');
-const impbtn = document.getElementById('impbtn');
-const expbtn = document.getElementById('expbtn');
-
-expbtn.addEventListener('click', async function (evt) {
-    var dl = document.createElement('a');
-    var res = await browser.storage.local.get('placeholder_urls');
-    var content = JSON.stringify(res.placeholder_urls);
-    //console.log(content);
-    //	return;
-    dl.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(content));
-    dl.setAttribute('download', 'data.json');
-    dl.setAttribute('visibility', 'hidden');
-    dl.setAttribute('display', 'none');
-    document.body.appendChild(dl);
-    dl.click();
-    document.body.removeChild(dl);
-});
-
-// delegate to real Import Button which is a file selector
-impbtnWrp.addEventListener('click', function(evt) {
-	console.log('impbtnWrp');
-	impbtn.click();
-})
-
-impbtn.addEventListener('input', function (evt) {
-
-	console.log('impbtn');
-
-	var file  = this.files[0];
-
-	//console.log(file.name);
-
-	var reader = new FileReader();
-	        reader.onload = async function(e) {
-            try {
-                var config = JSON.parse(reader.result);
-		//console.log("impbtn", config);
-		await browser.storage.local.set({ 'placeholder_urls': config});
-		document.querySelector("form").submit();
-            } catch (e) {
-                console.error('error loading file: ' + e);
-            }
-        };
-        reader.readAsText(file);
-
-});
-*/
