@@ -89,7 +89,24 @@ async function tabinfo2clip(queryObject) {
 	}
 
 	// 3. write infos to textarea
-    document.querySelector("#output").value = out;
+    const txtarea_out = document.querySelector("#output");
+    txtarea_out.value = out;
+
+    txtarea_out.focus();
+    txtarea_out.select();
+
+}
+
+function copyTxtArea(){
+    const out = document.querySelector("#output").value;
+
+    navigator.clipboard.writeText(out).then(function() {
+        /* clipboard successfully set */
+        console.log('copy ok');
+    }, function(e) {
+        /* clipboard write failed */
+        console.error(e);
+    });
 }
 
 function deleteRow(rowTr) {
@@ -124,7 +141,7 @@ function createTableRow(feed) {
 			//var input = document.createElement('textarea');
 			input = document.createElement('input');
 			input.className = key;
-			input.placeholder = "%title - %url";
+			input.placeholder = "Write your own copy rule here then click create";
 			//input.style.float = 'right';
 			input.style.width = '99%';
 			//input.style.width = '90%';
@@ -213,18 +230,23 @@ async function restoreOptions() {
 	if ( !Array.isArray(res.placeholder_urls) ) {
 		res.placeholder_urls = [
 			{
+				'activ': false,
+				'name': '%url' ,
+				'action' : ''
+			},
+			{
 				'activ': true,
-				'name': 'Text: %title - %url' ,
+				'name': '%title - %url' ,
 				'action' : ''
 			},
 			{
 				'activ': false,
-				'name': 'HTML Link: <a href="%url">%title</a>' ,
+				'name': '<a href="%url">%title</a>' ,
 				'action' : ''
 			},
 			{
 				'activ': false,
-				'name': 'Markdown: [%title](%url)' ,
+				'name': '[%title](%url)' ,
 				'action' : ''
 			}
 		]
@@ -243,4 +265,5 @@ document.addEventListener('DOMContentLoaded', restoreOptions);
 document.querySelector("#btnActiveTab").addEventListener("click", getActiveTab);
 document.querySelector("#btnAllTabs").addEventListener("click", getAllTabs);
 document.querySelector("#btnSelectedTabs").addEventListener("click", getSelectedTabs);
+document.querySelector("#btnCopy").addEventListener("click", copyTxtArea);
 
