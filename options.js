@@ -1,16 +1,11 @@
 /* global browser */
 
-//const temporary = browser.runtime.id.endsWith('@temporary-addon');
-//const manifest = browser.runtime.getManifest();
-//const extname = manifest.name;
-
 async function getActivPlaceholderStr() {
 	const store = await browser.storage.local.get('placeholder_urls');
 	for(const val of store.placeholder_urls) {
 		if(typeof val.activ === 'boolean' && val.activ === true){
 			return val.name;
 		}
-
 	}
 	return "n/a";
 }
@@ -22,7 +17,6 @@ function getAllTabs() {
 		currentWindow:true,
 	});
 }
-
 
 function getSelectedTabs() {
 	tabinfo2clip({
@@ -99,14 +93,7 @@ async function tabinfo2clip(queryObject) {
 
 function copyTxtArea(){
     const out = document.querySelector("#output").value;
-
-    navigator.clipboard.writeText(out).then(function() {
-        /* clipboard successfully set */
-        console.log('copy ok');
-    }, function(e) {
-        /* clipboard write failed */
-        console.error(e);
-    });
+    navigator.clipboard.writeText(out);
 }
 
 function deleteRow(rowTr) {
@@ -123,29 +110,21 @@ function createTableRow(feed) {
 	Object.keys(feed).sort().forEach( (key) => {
 
 		if( key === 'activ'){
-			//if(feed[key] !== null) {
-				input = document.createElement('input');
-				input.className = key;
-				input.placeholder = key;
-				input.style.width = '100%';
-				input.type='radio';
-				input.name="placeholdergroup";
-				input.checked= (typeof feed[key] === 'boolean' && feed[key] === true)? true: false;
-				input.addEventListener("change", saveOptions);
-				tr.insertCell().appendChild(input);
-			/*}else{
-				tr.insertCell();
-			}*/
+            input = document.createElement('input');
+            input.className = key;
+            input.placeholder = key;
+            input.style.width = '100%';
+            input.type='radio';
+            input.name="placeholdergroup";
+            input.checked= (typeof feed[key] === 'boolean' && feed[key] === true)? true: false;
+            input.addEventListener("change", saveOptions);
+            tr.insertCell().appendChild(input);
 
 		}else if( key === 'name'){
-			//var input = document.createElement('textarea');
 			input = document.createElement('input');
 			input.className = key;
 			input.placeholder = "Write your own copy rule here then click create";
-			//input.style.float = 'right';
 			input.style.width = '99%';
-			//input.style.width = '90%';
-			//input.style.margin = '3px';
 			input.value = feed[key];
             if(feed.action !== 'save'){
                 input.disabled = true;
@@ -164,9 +143,9 @@ function createTableRow(feed) {
 
 	var button;
 	if(feed.action === 'save'){
-		button = createButton("Create", "saveButton", function() { saveOptions(); window.close(); },  true);
+		button = createButton("Create", "saveButton", function() { saveOptions(); restoreOptions() },  true);
 	}else{
-		button = createButton("Delete", "deleteButton", function() { deleteRow(tr); saveOptions(); window.close(); }, true );
+		button = createButton("Delete", "deleteButton", function() { deleteRow(tr); saveOptions(); }, true );
 	}
 	tr.insertCell().appendChild(button);
 }
@@ -179,13 +158,13 @@ function collectConfig() {
 		try {
 			var name = mainTableBody.rows[row].querySelector('.name').value;
 			try {
-			var activ = mainTableBody.rows[row].querySelector('.activ').checked;
-			if(name !== '' && name.length > 1) {
-				feeds.push({
-					'activ': activ,
-					'name': name
-				});
-			}
+                var activ = mainTableBody.rows[row].querySelector('.activ').checked;
+                if(name !== '' && name.length > 1) {
+                    feeds.push({
+                        'activ': activ,
+                        'name': name
+                    });
+                }
 			}catch(e) {
 				console.error(e);
 			}
@@ -220,7 +199,7 @@ async function saveOptions(/*e*/) {
 }
 
 async function restoreOptions() {
-	//var mainTableBody = document.getElementById('mainTableBody');
+    mainTableBody.textContent = ''; // faster than innerHTML
 	createTableRow({
 		'activ': null,
 		'name': '' ,
@@ -259,8 +238,6 @@ async function restoreOptions() {
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
-//document.querySelector("form").addEventListener("submit", saveOptions);
-
 
 document.querySelector("#btnActiveTab").addEventListener("click", getActiveTab);
 document.querySelector("#btnAllTabs").addEventListener("click", getAllTabs);
