@@ -2,7 +2,7 @@
   "author": "igorlogius",
   "browser_action": {
 	  "default_title": "Get Tabs Infos",
-	  "default_popup": "options.html"
+	  "default_popup": "popup.html"
   },
   "description": "Get Tabs Infos",
   "icons": {
@@ -14,5 +14,5 @@
     "tabs",
     "storage"
   ],
-  "version": "1.5.2"
+  "version": "1.5.3"
 }
