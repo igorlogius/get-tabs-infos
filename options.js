@@ -201,7 +201,7 @@ function createButton(text, id, callback, submit) {
 	var button = document.createElement('button');
 	button.id = id;
 	button.textContent = text;
-	button.className = "browser-style";
+	button.className = "browser-style action";
 	if (submit) {
 		button.type = "submit";
 	} else {
