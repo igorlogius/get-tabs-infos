@@ -215,7 +215,7 @@ async function restoreOptions() {
 			},
 			{
 				'activ': true,
-				'name': '%title - %url' ,
+				'name': '%index - %title - %url' ,
 				'action' : ''
 			},
 			{
