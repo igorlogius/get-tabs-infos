@@ -2,7 +2,6 @@
 <html>
 <head>
 	<meta charset="utf-8"></meta>
-  	<title>settings</title>
     <style>
         .action {
             width:100%;
@@ -12,34 +11,26 @@
 <body style="width:680px;background:lightgray;">
         <p></p>
         <fieldset>
-        <label>1.Select/Create Format</label>
+        <label>1. Create and Select Format (%url,%title,%index, <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/Tab">more</a>) </label>
 		<table id="mainTable" border=1 style="width:100%;text-align:left;" >
-			<thead>
-				<th style="width:5em;"><!-- Select--> </th>
-				<th>Format (%url,%title,<a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/Tab">more</a>)</th>
-				<th style="width:5em;"></th>
-			</thead>
 			<tbody id='mainTableBody' />
 		</table>
         </fieldset>
         <fieldset>
-            <label>2.Choose Scope</label>
-            <div style="float:right;">
-        		<input type="button" value="Active"  id="btnActiveTab" title"only the currently active tab in this window" />
-    	    	<input type="button" value="Selected" id="btnSelectedTabs" title="all selected (aka. highlighted) tabs in this window" />
-		        <input type="button" value="Window" id="btnAllTabs" title="all tabs in this window" />
+            <label>2. Select Scope</label>
+            <div style="text-align:center;">
+        		<input type="button" value="Current Tab"  id="btnActiveTab" />
+    	    	<input type="button" value="Selected Tabs" id="btnSelectedTabs" />
+		        <input type="button" value="Window Tabs" id="btnAllTabs" />
             </div>
         </fieldset>
         <fieldset>
-        <textarea wrap="off" style="width:100%;height:5em;resize:vertical;" id="output" placeholder="Output will appear here"></textarea>
-        </fieldset>
-        <fieldset>
-            <a target="_blank" href="https://github.com/igorlogius/get-tabs-infos" > <button> &#8505; Help </button></a>
-            <div style="float:right;">
-		        <input type="button" value="3.Copy Output"  id="btnCopy" />
+            <label>3. Preview, Edit and Copy Output</label>
+            <textarea wrap="off" style="width:100%;height:5em;resize:vertical;" id="output" placeholder="Output  will appear here"></textarea>
+            <div style="text-align:center;">
+		        <input type="button" value="Copy" id="btnCopy" style="width:50%;" />
             </div>
         </fieldset>
-        <p></p>
     <script src="popup.js"></script>
 </body>
 </html>
