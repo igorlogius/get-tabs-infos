@@ -1,5 +1,8 @@
 /* global browser */
 
+const manifest = browser.runtime.getManifest();
+const extname = manifest.name;
+
 async function getActivPlaceholderStr() {
     const store = await browser.storage.local.get('placeholder_urls');
     for(const val of store.placeholder_urls) {
@@ -231,11 +234,23 @@ async function restoreOptions() {
     });
 }
 
+function getTimeStampStr() {
+    const d = new Date();
+    let ts = "";
+    [  d.getFullYear(), d.getMonth()+1, d.getDate()+1,
+        d.getHours(), d.getMinutes(), d.getSeconds()].forEach( (t,i) => {
+        ts = ts + ((i!==3)?"-":"_") + ((t<10)?"0":"") + t;
+    });
+    return ts.substring(1);
+}
+
+
 function saveTxtArea(){
     console.log('saveTxtArea');
     const out = document.querySelector("#output").value;
+    //const nblines = out.split('\n').length -1;
     let a = document.createElement('a');
-    a.download = 'get-tabs-infos.txt';
+    a.download = extname + " " + getTimeStampStr() + '.txt';
     a.setAttribute('href','data:text/plain;charset=utf-8,'+encodeURIComponent(out));
     a.click();
     a.remove();
