@@ -231,10 +231,20 @@ async function restoreOptions() {
     });
 }
 
+function saveTxtArea(){
+    console.log('saveTxtArea');
+    const out = document.querySelector("#output").value;
+    let a = document.createElement('a');
+    a.download = 'get-tabs-infos.txt';
+    a.setAttribute('href','data:text/plain;charset=utf-8,'+encodeURIComponent(out));
+    a.click();
+    a.remove();
+}
+
 document.addEventListener('DOMContentLoaded', restoreOptions);
 
 document.querySelector("#btnActiveTab").addEventListener("click", getActiveTab);
 document.querySelector("#btnAllTabs").addEventListener("click", getAllTabs);
 document.querySelector("#btnSelectedTabs").addEventListener("click", getSelectedTabs);
 document.querySelector("#btnCopy").addEventListener("click", copyTxtArea);
-
+document.querySelector("#btnSave").addEventListener("click", saveTxtArea);
