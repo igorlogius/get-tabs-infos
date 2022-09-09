@@ -30,12 +30,18 @@ function getSelectedTabs() {
     });
 }
 
-function getActiveTab() {
+function getAllTabsAllWindows() {
+    tabinfo2clip({
+        url: "<all_urls>",
+        hidden: false
+    });
+}
+
+function getSelectedTabsAllWindows() {
     tabinfo2clip({
         url: "<all_urls>",
         hidden: false,
-        currentWindow:true,
-        active: true,
+        highlighted: true,
     });
 }
 
@@ -258,8 +264,9 @@ function saveTxtArea(){
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
 
-document.querySelector("#btnActiveTab").addEventListener("click", getActiveTab);
 document.querySelector("#btnAllTabs").addEventListener("click", getAllTabs);
 document.querySelector("#btnSelectedTabs").addEventListener("click", getSelectedTabs);
+document.querySelector("#btnAllTabsAllWindows").addEventListener("click", getAllTabsAllWindows);
+document.querySelector("#btnSelectedTabsAllWindows").addEventListener("click", getSelectedTabsAllWindows);
 document.querySelector("#btnCopy").addEventListener("click", copyTxtArea);
 document.querySelector("#btnSave").addEventListener("click", saveTxtArea);
