@@ -51,7 +51,7 @@ async function tabinfo2clip(queryObject) {
     const tmp = await getActivPlaceholderStr();
 
     // 2. replace placeholders
-    const replacers = [
+    const tabAttrReplacers = [
         "active"
         ,"attention"
         ,"audible"
@@ -86,9 +86,10 @@ async function tabinfo2clip(queryObject) {
     const tabs = await browser.tabs.query(queryObject);
     for(const tab of tabs) {
         tmp2 = tmp;
-        for (const p of replacers) {
+        for (const p of tabAttrReplacers) {
             tmp2 = tmp2.replaceAll("%"+p, (typeof tab[p] !== 'undefined'? tab[p] : "n/a"));
         }
+        tmp2 = tmp2.replaceAll("%linebreak", '\r\n');
         out = out + tmp2 + '\r\n';
     }
 
