@@ -254,9 +254,14 @@ function getTimeStampStr() {
 function saveTxtArea(){
     console.log('saveTxtArea');
     const out = document.querySelector("#output").value;
+    const saveFilename = document.querySelector("#saveFilename").value;
     //const nblines = out.split('\n').length -1;
     let a = document.createElement('a');
-    a.download = extname + " " + getTimeStampStr() + '.txt';
+    if(saveFilename === ''){
+        a.download = extname + " " + getTimeStampStr() + '.txt';
+    }else{
+        a.download = saveFilename + '.txt';
+    }
     a.setAttribute('href','data:text/plain;charset=utf-8,'+encodeURIComponent(out));
     a.click();
     a.remove();

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
 <head>
 	<meta charset="utf-8"></meta>
     <style>
         .action {
+            width:100%;
+        }
+        #saveFilename {
             width:100%;
         }
     </style>
@@ -26,13 +28,15 @@
             </div>
         </fieldset>
         <fieldset>
-            <label>3. Preview, Edit and Copy Output</label>
-            <textarea wrap="off" style="width:100%;height:5em;resize:vertical;" id="output" placeholder="Output  will appear here"></textarea>
+            <label>3. Preview &amp; Edit</label>
+            <textarea wrap="off" style="width:100%;height:5em;resize:vertical;" id="output" placeholder="Output will appear here"></textarea>
+            <label>4. Enter Filename for Saving (optional)</label>
+            <input id="saveFilename" type="text" value="" placeholder="Get Tabs Infos YYYY-MM-DD_hh-mm-ss" />
             <div style="text-align:center;">
-		        <input type="button" value="Save" id="btnSave" style="width:25%;" />
 		        <input type="button" value="Copy" id="btnCopy" style="width:25%;" />
+                or
+		        <input type="button" value="Save" id="btnSave" style="width:25%;" />
             </div>
         </fieldset>
     <script src="popup.js"></script>
 </body>
-</html>
