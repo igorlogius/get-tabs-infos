@@ -1,42 +1,71 @@
 <!DOCTYPE html>
 <head>
-	<meta charset="utf-8"></meta>
-    <style>
-        .action {
-            width:100%;
-        }
-        #saveFilename {
-            width:100%;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <style>
+    .action {
+      width: 100%;
+    }
+    #saveFilename {
+      width: 100%;
+    }
+  </style>
 </head>
-<body style="width:680px;background:lightgray;">
-        <p></p>
-        <fieldset>
-        <label>1. Create and Select Format (%linebreak,%url,%title,%index, <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/Tab">more</a>) </label>
-		<table id="mainTable" border=1 style="width:100%;text-align:left;" >
-			<tbody id='mainTableBody' />
-		</table>
-        </fieldset>
-        <fieldset>
-            <label>2. Select Scope</label>
-            <div style="text-align:center;">
-    	    	<input type="button" value="Selected (All Windows)" id="btnSelectedTabsAllWindows" />
-		        <input type="button" value="All Tabs (All Windows)" id="btnAllTabsAllWindows" />
-		        <input type="button" value="All Tabs (This Window)" id="btnAllTabs" />
-    	    	<input type="button" value="Selected (This Window)" id="btnSelectedTabs" />
-            </div>
-        </fieldset>
-        <fieldset>
-            <label>3. Preview &amp; Edit</label>
-            <textarea wrap="off" style="width:100%;height:5em;resize:vertical;" id="output" placeholder="Output will appear here"></textarea>
-            <label>4. Enter Filename for Saving (optional)</label>
-            <input id="saveFilename" type="text" value="" placeholder="Get Tabs Infos YYYY-MM-DD_hh-mm-ss" />
-            <div style="text-align:center;">
-		        <input type="button" value="Copy" id="btnCopy" style="width:25%;" />
-                or
-		        <input type="button" value="Save" id="btnSave" style="width:25%;" />
-            </div>
-        </fieldset>
-    <script src="popup.js"></script>
+<body style="width: 680px; background: lightgray">
+  <p></p>
+  <fieldset>
+    <label
+      >1. Create and Select Format (%linebreak,%url,%title,%index,
+      <a
+        href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/Tab"
+        >more</a
+      >
+      + (%protocol,%password,%search,%port,%origin,%pathname,%hostname)
+    </label>
+    <table id="mainTable" border="1" style="width: 100%; text-align: left">
+      <tbody id="mainTableBody" />
+    </table>
+  </fieldset>
+  <fieldset>
+    <label>2. Select Scope</label>
+    <div style="text-align: center">
+      <input
+        type="button"
+        value="Selected (All Windows)"
+        id="btnSelectedTabsAllWindows"
+      />
+      <input
+        type="button"
+        value="All Tabs (All Windows)"
+        id="btnAllTabsAllWindows"
+      />
+      <input type="button" value="All Tabs (This Window)" id="btnAllTabs" />
+      <input
+        type="button"
+        value="Selected (This Window)"
+        id="btnSelectedTabs"
+      />
+    </div>
+  </fieldset>
+  <fieldset>
+    <label>3. Preview &amp; Edit</label>
+    <textarea
+      wrap="off"
+      style="width: 100%; height: 5em; resize: vertical"
+      id="output"
+      placeholder="Output will appear here"
+    ></textarea>
+    <label>4. Enter Filename for Saving (optional)</label>
+    <input
+      id="saveFilename"
+      type="text"
+      value=""
+      placeholder="Get Tabs Infos YYYY-MM-DD_hh-mm-ss"
+    />
+    <div style="text-align: center">
+      <input type="button" value="Copy" id="btnCopy" style="width: 25%" />
+      or
+      <input type="button" value="Save" id="btnSave" style="width: 25%" />
+    </div>
+  </fieldset>
+  <script src="popup.js"></script>
 </body>
