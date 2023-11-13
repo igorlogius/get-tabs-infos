@@ -1,6 +1,7 @@
 {
   "author": "igorlogius",
   "browser_action": {
+    "default_area": "navbar",
     "default_popup": "popup.html",
     "theme_icons": [
       {
@@ -35,6 +36,7 @@
   },
   "manifest_version": 2,
   "name": "Get Tabs Infos",
+  "description": "Get tab information in a user defined custom format string",
   "permissions": ["tabs", "storage"],
-  "version": "1.10.7"
+  "version": "1.10.8"
 }
