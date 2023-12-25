@@ -1,6 +1,6 @@
 Get tab information in a user defined custom format string
 
-
+<b>Short Demo Video:</b>
 
 https://github.com/igorlogius/get-tabs-infos/assets/67047467/2fe23f05-1af9-4f96-badd-166c974b9381
 
