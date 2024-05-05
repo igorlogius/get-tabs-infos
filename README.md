@@ -1,5 +1,7 @@
 Get tab information in a user defined custom format string
 
+### [Click here to report a bug, make a suggestion or ask a question](https://github.com/igorlogius/igorlogius/issues/new/choose)
+
 <b>Short Demo Video:</b>
 
 https://github.com/igorlogius/get-tabs-infos/assets/67047467/2fe23f05-1af9-4f96-badd-166c974b9381
