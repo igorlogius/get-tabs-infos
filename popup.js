@@ -142,7 +142,7 @@ function createTableRow(feed) {
   if (feed.action === "save") {
     tr.insertCell();
   } else {
-    button = createButton("Delete", function () {
+    button = createButton("🗑", function () {
       if (confirm("Are you sure?")) {
         deleteRow(tr);
         saveOptions();
@@ -159,7 +159,7 @@ function createTableRow(feed) {
         input = document.createElement("input");
         input.className = key;
         input.placeholder = key;
-        input.style.width = "100%";
+        input.style.width = "85%";
         input.type = "radio";
         input.name = "placeholdergroup";
         input.checked =
@@ -169,7 +169,7 @@ function createTableRow(feed) {
       } else if (key === "name") {
         input = document.createElement("input");
         input.className = key;
-        input.placeholder = "Write your own copy rule here then click create";
+        input.placeholder = "Add your own format string then click ➕";
         input.style.width = "99%";
         input.value = feed[key];
         if (feed.action !== "save") {
@@ -187,7 +187,7 @@ function createTableRow(feed) {
     });
 
   if (feed.action === "save") {
-    button = createButton("Create", function () {
+    button = createButton("➕", function () {
       saveOptions();
       restoreOptions();
     });
@@ -299,7 +299,7 @@ function saveTxtArea() {
   }
   a.setAttribute(
     "href",
-    "data:text/plain;charset=utf-8," + encodeURIComponent(out)
+    "data:text/plain;charset=utf-8," + encodeURIComponent(out),
   );
   a.click();
   a.remove();

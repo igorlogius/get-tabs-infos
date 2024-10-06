@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <head>
   <meta charset="utf-8" />
   <style>
@@ -13,58 +13,74 @@
 <body style="width: 680px; background: lightgray">
   <p></p>
   <fieldset>
-    <label
-      >1. Create and Select Format (%linebreak,%url,%title,%index,
-      <a
-        href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/Tab"
-        >more</a
+    <legend>
+      1.
+      <abbr
+        title="available Placeholders: %linebreak, %url, %protocol, %search, %port, %hostname, %origin, %title, %index, %audible, %discarded, %lastAccessed, %pinned"
+        >Create/Select Format</abbr
       >
-      + (%protocol,%password,%search,%port,%origin,%pathname,%hostname)
-    </label>
+    </legend>
     <table id="mainTable" border="1" style="width: 100%; text-align: left">
       <tbody id="mainTableBody" />
     </table>
   </fieldset>
   <fieldset>
-    <label>2. Select Scope</label>
-    <div style="text-align: center">
-      <input
-        type="button"
-        value="Selected (All Windows)"
-        id="btnSelectedTabsAllWindows"
-      />
-      <input
-        type="button"
-        value="All Tabs (All Windows)"
-        id="btnAllTabsAllWindows"
-      />
-      <input type="button" value="All Tabs (This Window)" id="btnAllTabs" />
-      <input
-        type="button"
-        value="Selected (This Window)"
-        id="btnSelectedTabs"
-      />
-    </div>
+    <legend>2. Pick Scope</legend>
+    <input
+      type="button"
+      value="All Tabs (Current Window)"
+      id="btnAllTabs"
+      style="width: 50%; float: right; text-align: right; padding: 3px"
+    />
+    <input
+      type="button"
+      value="All Tabs (all Windows)"
+      id="btnAllTabsAllWindows"
+      style="width: 50%; float: right; text-align: right; padding: 3px"
+    />
+    <input
+      type="button"
+      value="Selected Tabs (Current Window)"
+      id="btnSelectedTabs"
+      style="width: 50%; float: right; text-align: right; padding: 3px"
+    />
+    <input
+      type="button"
+      value="Selected Tabs (all Windows)"
+      id="btnSelectedTabsAllWindows"
+      style="width: 50%; float: right; text-align: right; padding: 3px"
+    />
   </fieldset>
   <fieldset>
-    <label>3. Preview &amp; Edit</label>
+    <legend>3. Preview</legend>
     <textarea
       wrap="off"
-      style="width: 100%; height: 5em; resize: vertical"
+      style="width: 100%; height: 10em; resize: vertical"
       id="output"
       placeholder="Output will appear here"
     ></textarea>
-    <label>4. Enter Filename for Saving (optional)</label>
+    <input
+      type="button"
+      value="Copy"
+      id="btnCopy"
+      style="width: 25%; float: right"
+    />
+  </fieldset>
+  <fieldset>
+    <legend>4. Filename for Save (optional)</legend>
     <input
       id="saveFilename"
       type="text"
       value=""
-      placeholder="Get Tabs Infos YYYY-MM-DD_hh-mm-ss"
+      placeholder="Default: Get Tabs Infos YYYY-MM-DD_hh-mm-ss"
     />
     <div style="text-align: center">
-      <input type="button" value="Copy" id="btnCopy" style="width: 25%" />
-      or
-      <input type="button" value="Save" id="btnSave" style="width: 25%" />
+      <input
+        type="button"
+        value="Save"
+        id="btnSave"
+        style="width: 25%; float: right"
+      />
     </div>
   </fieldset>
   <script src="popup.js"></script>

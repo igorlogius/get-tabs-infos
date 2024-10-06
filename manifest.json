@@ -19,5 +19,5 @@
   "name": "Get Tabs Infos",
   "description": "Get tab information in a user defined custom format string",
   "permissions": ["tabs", "storage"],
-  "version": "1.10.9"
+  "version": "1.10.10"
 }
