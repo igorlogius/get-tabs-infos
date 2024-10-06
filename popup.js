@@ -148,6 +148,8 @@ function createTableRow(feed) {
         saveOptions();
       }
     });
+
+    button.className = "browser-style action";
     tr.insertCell().appendChild(button);
   }
 
@@ -168,7 +170,7 @@ function createTableRow(feed) {
         tr.insertCell().appendChild(input);
       } else if (key === "name") {
         input = document.createElement("input");
-        input.className = key;
+        input.className = key + " browser-style ";
         input.placeholder = "Add your own format string then click ➕";
         input.style.width = "99%";
         input.value = feed[key];
@@ -178,7 +180,7 @@ function createTableRow(feed) {
         tr.insertCell().appendChild(input);
       } else if (key !== "action" && feed.action !== "save") {
         input = document.createElement("input");
-        input.className = key;
+        input.className = key + " browser-style ";
         input.placeholder = key;
         input.style.width = "0px";
         input.value = feed[key];
