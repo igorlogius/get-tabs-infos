@@ -7,7 +7,7 @@
       width: 680px;
       background: lightgray;
       padding: 3px;
-      font-size: 0.5em;
+      font-size: 0.6em;
     }
     legend {
       font-size: 2em;
@@ -23,14 +23,10 @@
       float: right;
       text-align: center;
     }
-    .action {
-      text-align: center;
-      width: 100%;
-    }
     #saveFilename {
       width: 100%;
     }
-    #mainTable {
+    #selectTable {
       width: 100%;
       text-align: left;
     }
@@ -44,26 +40,67 @@
     }
     #output {
       width: 100%;
-      height: 8em;
+      height: 16em;
       resize: vertical;
+    }
+    #btnDelEntry,
+    #btnAddEntry {
+      width: 10%;
+      text-align: center;
+    }
+
+    #newEntry,
+    #formatOptions {
+      width: 90%;
+      text-align: center;
+    }
+
+    #formatOptions {
+      float: right;
+    }
+    #newEntry {
+      float: left;
     }
   </style>
 </head>
 <body>
   <fieldset>
-    <legend>
-      1.
-      <abbr
-        title="available Placeholders: %linebreak, %url, %protocol, %search, %port, %hostname, %origin, %title, %index, %audible, %discarded, %lastAccessed, %pinned"
-        >Create/Select Format</abbr
-      >
-    </legend>
-    <table id="mainTable" border="1">
-      <tbody id="mainTableBody" />
+    <legend>1. Format</legend>
+    <table id="selectTable" border="1">
+      <tr>
+        <td>
+          <abbr
+            title="Placeholders: %linebreak, %url, %protocol, %search, %port, %pathname, %hostname, %origin, %title, %index, %audible, %discarded, %lastAccessed, %pinned, %cookieStoreId, %favIconUrl, %hidden, %highlighted, %id, %incognito, %status"
+          >
+            <input
+              id="newEntry"
+              type="text"
+              value=""
+              placeholder="Enter new Format String here, hover to show placeholders"
+            />
+          </abbr>
+          <input
+            type="button"
+            value="➕"
+            title="add new entry"
+            id="btnAddEntry"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="button" value="🗑" title="delete" id="btnDelEntry" />
+          <select id="formatOptions">
+            <option value="">-- Select Format --</option>
+          </select>
+        </td>
+      </tr>
+
+      <tr></tr>
     </table>
   </fieldset>
   <fieldset>
-    <legend>2. Pick Scope</legend>
+    <legend>2. Scope</legend>
     <input type="button" value="All Tabs (Current Window)" id="btnAllTabs" />
     <input
       type="button"
@@ -82,11 +119,11 @@
     />
   </fieldset>
   <fieldset>
-    <legend>3. Preview</legend>
+    <legend>3. Output</legend>
     <textarea
       wrap="off"
       id="output"
-      placeholder="Output will appear here"
+      placeholder="Select Format and Scope and Output will appear here"
     ></textarea>
     <input type="button" value="Copy" id="btnCopy" />
   </fieldset>

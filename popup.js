@@ -3,16 +3,6 @@
 const manifest = browser.runtime.getManifest();
 const extname = manifest.name;
 
-async function getActivPlaceholderStr() {
-  const store = await browser.storage.local.get("placeholder_urls");
-  for (const val of store.placeholder_urls) {
-    if (typeof val.activ === "boolean" && val.activ === true) {
-      return val.name;
-    }
-  }
-  return "n/a";
-}
-
 function getAllTabs() {
   tabinfo2clip({
     url: "<all_urls>",
@@ -46,43 +36,31 @@ function getSelectedTabsAllWindows() {
 }
 
 async function tabinfo2clip(queryObject) {
-  // 1. get the format string from storage
-  const tmp = await getActivPlaceholderStr();
+  // 1. get format string
+  const tmp = document.getElementById("formatOptions").value;
 
   // 2. replace placeholders
   const tabAttrReplacers = [
-    "active",
-    "attention",
-    "audible",
-    "autoDiscardable",
-    "cookieStoreId",
-    "discarded",
-    "favIconUrl",
-    "height",
-    "hidden",
-    "highlighted",
-    "id",
-    "incognito",
-    "index",
-    "isArticle",
-    "isInReaderMode",
-    "lastAccessed",
-    "openerTabId",
-    "pinned",
-    "sessionId",
-    "status",
-    "successorTabId",
-    "title",
-    "width",
-    "windowId",
     "url",
     "protocol",
-    "password",
     "search",
     "port",
     "origin",
     "pathname",
     "hostname",
+    "audible",
+    "discarded",
+    "cookieStoreId",
+    "favIconUrl",
+    "hidden",
+    "highlighted",
+    "id",
+    "incognito",
+    "index",
+    "lastAccessed",
+    "pinned",
+    "status",
+    "title",
   ];
 
   let out = "";
@@ -96,7 +74,6 @@ async function tabinfo2clip(queryObject) {
     for (const p of tabAttrReplacers) {
       switch (p) {
         case "protocol":
-        case "password":
         case "search":
         case "port":
         case "origin":
@@ -132,143 +109,14 @@ function deleteRow(rowTr) {
   mainTableBody.removeChild(rowTr);
 }
 
-function createTableRow(feed) {
-  var mainTableBody = document.getElementById("mainTableBody");
-  var tr = mainTableBody.insertRow();
+function createFormatOption(feed) {
+  let formatOptionsSelect = document.getElementById("formatOptions");
 
-  var input;
-
-  var button;
-  if (feed.action === "save") {
-    tr.insertCell();
-  } else {
-    button = createButton("🗑", function () {
-      if (confirm("Are you sure?")) {
-        deleteRow(tr);
-        saveOptions();
-      }
-    });
-
-    button.className = "browser-style action";
-    tr.insertCell().appendChild(button);
-  }
-
-  Object.keys(feed)
-    .sort()
-    .reverse()
-    .forEach((key) => {
-      if (key === "activ" && feed.action !== "save") {
-        input = document.createElement("input");
-        input.className = key;
-        input.placeholder = key;
-        input.style.width = "85%";
-        input.type = "radio";
-        input.name = "placeholdergroup";
-        input.checked =
-          typeof feed[key] === "boolean" && feed[key] === true ? true : false;
-        input.addEventListener("change", saveOptions);
-        tr.insertCell().appendChild(input);
-      } else if (key === "name") {
-        input = document.createElement("input");
-        input.className = key + " browser-style ";
-        input.placeholder = "Add your own format string then click ➕";
-        input.style.width = "99%";
-        input.value = feed[key];
-        if (feed.action !== "save") {
-          input.disabled = true;
-        }
-        tr.insertCell().appendChild(input);
-      } else if (key !== "action" && feed.action !== "save") {
-        input = document.createElement("input");
-        input.className = key + " browser-style ";
-        input.placeholder = key;
-        input.style.width = "0px";
-        input.value = feed[key];
-        tr.insertCell().appendChild(input);
-      }
-    });
-
-  if (feed.action === "save") {
-    button = createButton("➕", function () {
-      saveOptions();
-      restoreOptions();
-    });
-    tr.insertCell().appendChild(button);
-  }
-}
-
-function collectConfig() {
-  // collect configuration from DOM
-  var mainTableBody = document.getElementById("mainTableBody");
-  var feeds = [];
-  for (var i = 0; i < mainTableBody.rows.length; i++) {
-    try {
-      let row = mainTableBody.rows[i];
-      var name = row.querySelector(".name")?.value;
-      var activ = row.querySelector(".activ")?.checked;
-      if (name !== "" && name.length > 1) {
-        feeds.push({
-          activ: activ,
-          name: name,
-        });
-      }
-    } catch (e) {
-      console.error("" + e);
+  Object.keys(feed).forEach((key) => {
+    if (key === "name") {
+      console.debug(feed);
+      formatOptionsSelect.add(new Option(feed[key], feed[key]));
     }
-  }
-  return feeds;
-}
-
-function createButton(text /*,title*/, callback) {
-  var button = document.createElement("button");
-  button.className = "browser-style action";
-  button.textContent = text;
-  button.addEventListener("click", callback);
-  return button;
-}
-
-async function saveOptions(/*e*/) {
-  var feeds = collectConfig();
-  await browser.storage.local.set({ placeholder_urls: feeds });
-}
-
-async function restoreOptions() {
-  var mainTableBody = document.getElementById("mainTableBody");
-  mainTableBody.textContent = ""; // faster than innerHTML
-  createTableRow({
-    activ: null,
-    name: "",
-    action: "save",
-  });
-  var res = await browser.storage.local.get("placeholder_urls");
-  if (!Array.isArray(res.placeholder_urls)) {
-    res.placeholder_urls = [
-      {
-        activ: false,
-        name: "%url",
-        action: "",
-      },
-      {
-        activ: true,
-        name: "%title - %url",
-        action: "",
-      },
-      {
-        activ: false,
-        name: '<a href="%url">%title</a>',
-        action: "",
-      },
-      {
-        activ: false,
-        name: "[%title](%url)",
-        action: "",
-      },
-    ];
-    await browser.storage.local.set({ placeholder_urls: res.placeholder_urls });
-  }
-  res.placeholder_urls.forEach((selector) => {
-    selector.action = "delete";
-    createTableRow(selector);
   });
 }
 
@@ -307,7 +155,74 @@ function saveTxtArea() {
   a.remove();
 }
 
-document.addEventListener("DOMContentLoaded", restoreOptions);
+async function onLoad() {
+  var res = await browser.storage.local.get("placeholder_urls");
+  if (!Array.isArray(res.placeholder_urls)) {
+    res.placeholder_urls = [
+      {
+        name: "%url",
+      },
+      {
+        name: "%title - %url",
+      },
+      {
+        name: '<a href="%url">%title</a>',
+      },
+      {
+        name: "[%title](%url)",
+      },
+    ];
+    await browser.storage.local.set({ placeholder_urls: res.placeholder_urls });
+  }
+  res.placeholder_urls.forEach((selector) => {
+    createFormatOption(selector);
+  });
+}
+
+async function addNewEntry() {
+  console.debug("addNewEntry");
+
+  let newEntry = document.getElementById("newEntry");
+
+  if (newEntry.value.trim() === "") {
+    return;
+  }
+
+  var res = await browser.storage.local.get("placeholder_urls");
+  if (!Array.isArray(res.placeholder_urls)) {
+    return;
+  }
+  res.placeholder_urls.unshift({ name: newEntry.value });
+
+  await browser.storage.local.set({ placeholder_urls: res.placeholder_urls });
+
+  document.location.reload();
+}
+
+async function delEntry() {
+  console.debug("delEntry");
+
+  let formatOptionsSelect = document.getElementById("formatOptions");
+
+  if (formatOptionsSelect.value === "") {
+    return;
+  }
+
+  var res = await browser.storage.local.get("placeholder_urls");
+  if (!Array.isArray(res.placeholder_urls)) {
+    return;
+  }
+
+  res.placeholder_urls = res.placeholder_urls.filter((el) => {
+    return el.name !== formatOptionsSelect.value;
+  });
+
+  await browser.storage.local.set({ placeholder_urls: res.placeholder_urls });
+
+  document.location.reload();
+}
+
+document.addEventListener("DOMContentLoaded", onLoad);
 
 document.querySelector("#btnAllTabs").addEventListener("click", getAllTabs);
 document
@@ -321,3 +236,6 @@ document
   .addEventListener("click", getSelectedTabsAllWindows);
 document.querySelector("#btnCopy").addEventListener("click", copyTxtArea);
 document.querySelector("#btnSave").addEventListener("click", saveTxtArea);
+
+document.querySelector("#btnAddEntry").addEventListener("click", addNewEntry);
+document.querySelector("#btnDelEntry").addEventListener("click", delEntry);
