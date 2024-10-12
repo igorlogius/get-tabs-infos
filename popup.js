@@ -114,7 +114,6 @@ function createFormatOption(feed) {
 
   Object.keys(feed).forEach((key) => {
     if (key === "name") {
-      console.debug(feed);
       formatOptionsSelect.add(new Option(feed[key], feed[key]));
     }
   });
@@ -137,7 +136,6 @@ function getTimeStampStr() {
 }
 
 function saveTxtArea() {
-  console.log("saveTxtArea");
   const out = document.querySelector("#output").value;
   const saveFilename = document.querySelector("#saveFilename").value;
   //const nblines = out.split('\n').length -1;
@@ -180,8 +178,6 @@ async function onLoad() {
 }
 
 async function addNewEntry() {
-  console.debug("addNewEntry");
-
   let newEntry = document.getElementById("newEntry");
 
   if (newEntry.value.trim() === "") {
@@ -200,8 +196,6 @@ async function addNewEntry() {
 }
 
 async function delEntry() {
-  console.debug("delEntry");
-
   let formatOptionsSelect = document.getElementById("formatOptions");
 
   if (formatOptionsSelect.value === "") {
