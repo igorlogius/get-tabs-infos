@@ -39,6 +39,12 @@ async function tabinfo2clip(queryObject) {
   // 1. get format string
   const tmp = document.getElementById("formatOptions").value;
 
+  let formatOptionsSelect = document.getElementById("formatOptions");
+  if (formatOptionsSelect.value === "") {
+    document.querySelector("#output").value = "";
+    return;
+  }
+
   // 2. replace placeholders
   const tabAttrReplacers = [
     "url",
@@ -104,6 +110,43 @@ function copyTxtArea() {
   navigator.clipboard.writeText(out);
 }
 
+async function copyTxtAreaAsHTML() {
+  let base_span = document.createElement("span"); // needs to be a <span> to prevent the final linebreak
+  let span = document.createElement("span"); // needs to be a <span> to prevent the final linebreak
+  span.style.position = "absolute";
+  span.style.bottom = "-9999999"; // move it offscreen
+  base_span.append(span);
+  document.body.append(base_span);
+
+  span.innerHTML = document
+    .querySelector("#output")
+    .value.replace(/\n/g, "<br/>");
+
+  if (
+    typeof navigator.clipboard.write === "undefined" ||
+    typeof ClipboardItem === "undefined"
+  ) {
+    base_span.focus();
+    document.getSelection().removeAllRanges();
+    var range = document.createRange();
+    range.selectNode(base_span);
+    document.getSelection().addRange(range);
+    document.execCommand("copy");
+  } else {
+    navigator.clipboard.write([
+      new ClipboardItem({
+        "text/plain": new Blob([base_span.innerHTML], {
+          type: "text/plain",
+        }),
+        "text/html": new Blob([base_span.innerHTML], {
+          type: "text/html",
+        }),
+      }),
+    ]);
+  }
+  base_span.remove();
+}
+
 function deleteRow(rowTr) {
   var mainTableBody = document.getElementById("mainTableBody");
   mainTableBody.removeChild(rowTr);
@@ -157,6 +200,9 @@ async function onLoad() {
   var res = await browser.storage.local.get("placeholder_urls");
   if (!Array.isArray(res.placeholder_urls)) {
     res.placeholder_urls = [
+      {
+        name: "All Placeholders: %id, %index, %linebreak, %url, %protocol, %search, %port, %pathname, %hostname, %origin, %title, %audible, %discarded, %lastAccessed, %pinned, %cookieStoreId, %favIconUrl, %hidden, %highlighted, %incognito, %status",
+      },
       {
         name: "%url",
       },
@@ -230,6 +276,9 @@ document
   .addEventListener("click", getSelectedTabsAllWindows);
 document.querySelector("#btnCopy").addEventListener("click", copyTxtArea);
 document.querySelector("#btnSave").addEventListener("click", saveTxtArea);
+document
+  .querySelector("#btnCopyAsHTML")
+  .addEventListener("click", copyTxtAreaAsHTML);
 
 document.querySelector("#btnAddEntry").addEventListener("click", addNewEntry);
 document.querySelector("#btnDelEntry").addEventListener("click", delEntry);

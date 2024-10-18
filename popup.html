@@ -18,7 +18,8 @@
       float: right;
       text-align: center;
     }
-    #btnCopy {
+    #btnCopy,
+    #btnCopyAsHTML {
       width: 25%;
       float: right;
       text-align: center;
@@ -65,7 +66,7 @@
 </head>
 <body>
   <fieldset>
-    <legend>1. Format</legend>
+    <legend>1. Select Format</legend>
     <table id="selectTable" border="1">
       <tr>
         <td>
@@ -76,7 +77,7 @@
               id="newEntry"
               type="text"
               value=""
-              placeholder="Enter new Format String here, hover to show placeholders"
+              placeholder="Enter a new Format String here, Hover to show placeholders."
             />
           </abbr>
           <input
@@ -100,7 +101,7 @@
     </table>
   </fieldset>
   <fieldset>
-    <legend>2. Scope</legend>
+    <legend>2. Pick Scope</legend>
     <input type="button" value="All Tabs (Current Window)" id="btnAllTabs" />
     <input
       type="button"
@@ -119,13 +120,14 @@
     />
   </fieldset>
   <fieldset>
-    <legend>3. Output</legend>
+    <legend>3. Copy Preview</legend>
     <textarea
       wrap="off"
       id="output"
       placeholder="Select Format and Scope and Output will appear here"
     ></textarea>
-    <input type="button" value="Copy" id="btnCopy" />
+    <input type="button" value="Copy as Text" id="btnCopy" />
+    <input type="button" value="Copy as HTML" id="btnCopyAsHTML" />
   </fieldset>
   <fieldset>
     <legend>4. Filename (optional)</legend>
