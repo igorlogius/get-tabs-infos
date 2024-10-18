@@ -1,9 +1,23 @@
 /* global browser */
 
+/*
 const manifest = browser.runtime.getManifest();
 const extname = manifest.name;
+*/
+
+async function setToStorage(id, value) {
+  let obj = {};
+  obj[id] = value;
+  return browser.storage.local.set(obj);
+}
+
+async function getFromStorage(type, id, fallback) {
+  let tmp = await browser.storage.local.get(id);
+  return typeof tmp[id] === type ? tmp[id] : fallback;
+}
 
 function getAllTabs() {
+  browser.storage.local.set({ lastSelectedScope: "AllTabs" });
   tabinfo2clip({
     url: "<all_urls>",
     hidden: false,
@@ -12,6 +26,7 @@ function getAllTabs() {
 }
 
 function getSelectedTabs() {
+  browser.storage.local.set({ lastSelectedScope: "SelectedTabs" });
   tabinfo2clip({
     url: "<all_urls>",
     hidden: false,
@@ -21,6 +36,7 @@ function getSelectedTabs() {
 }
 
 function getAllTabsAllWindows() {
+  browser.storage.local.set({ lastSelectedScope: "AllTabsAllWindows" });
   tabinfo2clip({
     url: "<all_urls>",
     hidden: false,
@@ -28,6 +44,7 @@ function getAllTabsAllWindows() {
 }
 
 function getSelectedTabsAllWindows() {
+  browser.storage.local.set({ lastSelectedScope: "SelectedTabsAllWindows" });
   tabinfo2clip({
     url: "<all_urls>",
     hidden: false,
@@ -111,40 +128,7 @@ function copyTxtArea() {
 }
 
 async function copyTxtAreaAsHTML() {
-  let base_span = document.createElement("span"); // needs to be a <span> to prevent the final linebreak
-  let span = document.createElement("span"); // needs to be a <span> to prevent the final linebreak
-  span.style.position = "absolute";
-  span.style.bottom = "-9999999"; // move it offscreen
-  base_span.append(span);
-  document.body.append(base_span);
-
-  span.innerHTML = document
-    .querySelector("#output")
-    .value.replace(/\n/g, "<br/>");
-
-  if (
-    typeof navigator.clipboard.write === "undefined" ||
-    typeof ClipboardItem === "undefined"
-  ) {
-    base_span.focus();
-    document.getSelection().removeAllRanges();
-    var range = document.createRange();
-    range.selectNode(base_span);
-    document.getSelection().addRange(range);
-    document.execCommand("copy");
-  } else {
-    navigator.clipboard.write([
-      new ClipboardItem({
-        "text/plain": new Blob([base_span.innerHTML], {
-          type: "text/plain",
-        }),
-        "text/html": new Blob([base_span.innerHTML], {
-          type: "text/html",
-        }),
-      }),
-    ]);
-  }
-  base_span.remove();
+  copyToClipboardAsHTML(document.querySelector("#output").value);
 }
 
 function deleteRow(rowTr) {
@@ -162,42 +146,8 @@ function createFormatOption(feed) {
   });
 }
 
-function getTimeStampStr() {
-  const d = new Date();
-  let ts = "";
-  [
-    d.getFullYear(),
-    d.getMonth() + 1,
-    d.getDate() + 1,
-    d.getHours(),
-    d.getMinutes(),
-    d.getSeconds(),
-  ].forEach((t, i) => {
-    ts = ts + (i !== 3 ? "-" : "_") + (t < 10 ? "0" : "") + t;
-  });
-  return ts.substring(1);
-}
-
-function saveTxtArea() {
-  const out = document.querySelector("#output").value;
-  const saveFilename = document.querySelector("#saveFilename").value;
-  //const nblines = out.split('\n').length -1;
-  let a = document.createElement("a");
-  if (saveFilename === "") {
-    a.download = extname + " " + getTimeStampStr() + ".txt";
-  } else {
-    a.download = saveFilename + ".txt";
-  }
-  a.setAttribute(
-    "href",
-    "data:text/plain;charset=utf-8," + encodeURIComponent(out),
-  );
-  a.click();
-  a.remove();
-}
-
 async function onLoad() {
-  var res = await browser.storage.local.get("placeholder_urls");
+  let res = await browser.storage.local.get("placeholder_urls");
   if (!Array.isArray(res.placeholder_urls)) {
     res.placeholder_urls = [
       {
@@ -221,6 +171,26 @@ async function onLoad() {
   res.placeholder_urls.forEach((selector) => {
     createFormatOption(selector);
   });
+
+  const lastSelectedFormat = await getFromStorage(
+    "string",
+    "lastSelectedFormat",
+    "",
+  );
+
+  let formatOptionsSelect = document.getElementById("formatOptions");
+  formatOptionsSelect.value = lastSelectedFormat;
+
+  const lastSelectedScope = await getFromStorage(
+    "string",
+    "lastSelectedScope",
+    "",
+  );
+
+  let scopeOptionsSelect = document.getElementById("scopeOptions");
+  scopeOptionsSelect.value = lastSelectedScope;
+
+  updateOutput();
 }
 
 async function addNewEntry() {
@@ -236,6 +206,7 @@ async function addNewEntry() {
   }
   res.placeholder_urls.unshift({ name: newEntry.value });
 
+  await browser.storage.local.set({ lastSelectedFormat: newEntry.value });
   await browser.storage.local.set({ placeholder_urls: res.placeholder_urls });
 
   document.location.reload();
@@ -257,28 +228,47 @@ async function delEntry() {
     return el.name !== formatOptionsSelect.value;
   });
 
+  await browser.storage.local.set({ lastSelectedFormat: "" });
   await browser.storage.local.set({ placeholder_urls: res.placeholder_urls });
 
   document.location.reload();
 }
 
+async function updateOutput() {
+  const formatOptionValue = document.getElementById("formatOptions").value;
+  const scopeOptionValue = document.getElementById("scopeOptions").value;
+  setToStorage("lastSelectedScope", scopeOptionValue);
+  setToStorage("lastSelectedFormat", formatOptionValue);
+
+  const txtarea_out = document.querySelector("#output");
+  if (scopeOptionValue !== "" && formatOptionValue !== "") {
+    const out = await getTabsInfos(scopeOptionValue, formatOptionValue);
+
+    txtarea_out.value = out;
+  } else {
+    txtarea_out.value = "";
+  }
+}
+
 document.addEventListener("DOMContentLoaded", onLoad);
 
-document.querySelector("#btnAllTabs").addEventListener("click", getAllTabs);
-document
-  .querySelector("#btnSelectedTabs")
-  .addEventListener("click", getSelectedTabs);
-document
-  .querySelector("#btnAllTabsAllWindows")
-  .addEventListener("click", getAllTabsAllWindows);
-document
-  .querySelector("#btnSelectedTabsAllWindows")
-  .addEventListener("click", getSelectedTabsAllWindows);
 document.querySelector("#btnCopy").addEventListener("click", copyTxtArea);
-document.querySelector("#btnSave").addEventListener("click", saveTxtArea);
+document.querySelector("#btnSave").addEventListener("click", () => {
+  const out = document.querySelector("#output").value;
+  const saveFilename = document.querySelector("#saveFilename").value;
+  saveToFile(out, saveFilename);
+});
 document
   .querySelector("#btnCopyAsHTML")
   .addEventListener("click", copyTxtAreaAsHTML);
 
 document.querySelector("#btnAddEntry").addEventListener("click", addNewEntry);
 document.querySelector("#btnDelEntry").addEventListener("click", delEntry);
+
+document
+  .querySelector("#formatOptions")
+  .addEventListener("change", updateOutput);
+
+document
+  .querySelector("#scopeOptions")
+  .addEventListener("change", updateOutput);

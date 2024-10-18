@@ -1,6 +1,9 @@
 {
   "author": "igorlogius",
   "homepage_url": "https://github.com/igorlogius",
+  "background": {
+    "scripts": ["utils.js", "background.js"]
+  },
 
   "browser_action": {
     "browser_style": true,
@@ -14,6 +17,18 @@
       }
     ]
   },
+
+  "commands": {
+    "copyAsText": {
+      "description": "Copy to clipboard as Text"
+    },
+    "copyAsHTML": {
+      "description": "Copy to clipboard as HTML"
+    },
+    "saveAsFile": {
+      "description": "Save to File"
+    }
+  },
   "icons": {
     "256": "icon.png"
   },
@@ -21,5 +36,5 @@
   "name": "Get Tabs Infos",
   "description": "Get tab information in a user defined custom format string",
   "permissions": ["tabs", "storage"],
-  "version": "1.10.13"
+  "version": "1.11.14"
 }
