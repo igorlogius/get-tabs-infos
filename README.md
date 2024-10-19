@@ -6,14 +6,11 @@ Get tab information in a user defined custom format string
 
 <b>Short Demo Video:</b>
 
-https://github.com/igorlogius/get-tabs-infos/assets/67047467/2fe23f05-1af9-4f96-badd-166c974b9381
+https://github.com/user-attachments/assets/3c601acb-ebd4-4b5e-bd09-27084dad85d8
 
-<b>usage: </b>
+<b>Usage/Features: </b>
 <ol>
-  <li>click the toolbar icon</li>
-  <li>(optional) create the format strings you want</li>
-  <li>select the format string you want to use (radio button)</li>
-  <li>select the scope "active", "selected" or "window"</li>
-  <li>(optional) further edit the otuput in the textarea</li>
-  <li>click the "Copy output" button to copy the content of the textarea</li>
+  <li>click the toolbar icon, select format and scope</li>
+  <li>copy to clipboard as text or html or save to file</li>
+  <li>custom shortcuts</li>
 </ol>
