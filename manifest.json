@@ -68,5 +68,5 @@
 
   "description": "Get tab information in a user defined custom format string",
   "permissions": ["tabs", "storage"],
-  "version": "1.12.14"
+  "version": "1.12.15"
 }

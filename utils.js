@@ -103,18 +103,6 @@ async function getTabsInfos(scope, format) {
     "origin",
     "pathname",
     "hostname",
-    "audible",
-    "discarded",
-    "cookieStoreId",
-    "favIconUrl",
-    "hidden",
-    "highlighted",
-    "id",
-    "incognito",
-    "index",
-    "lastAccessed",
-    "pinned",
-    "status",
     "title",
   ];
 
