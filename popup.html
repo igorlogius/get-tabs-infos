@@ -13,11 +13,11 @@
       font-size: 2em;
       font-weight: bold;
     }
-    #btnSave {
+    #btnSaveToFile {
       width: 100%;
       text-align: center;
     }
-    #btnCopy,
+    #btnCopyAsText,
     #btnCopyAsHTML {
       width: 50%;
       float: right;
@@ -36,8 +36,8 @@
       height: 16em;
       resize: vertical;
     }
-    #btnDelEntry,
-    #btnAddEntry {
+    #btnDeleteFormat,
+    #btnAddFormat {
       width: 10%;
       text-align: center;
     }
@@ -79,7 +79,7 @@
           type="button"
           value="➕"
           title="Add new Format String"
-          id="btnAddEntry"
+          id="btnAddFormat"
         />
       </td>
     </tr>
@@ -89,7 +89,7 @@
           type="button"
           value="🗑"
           title="Delete Selected Format String"
-          id="btnDelEntry"
+          id="btnDeleteFormat"
         />
         <select id="formatOptions">
           <option value="">-- Select Format --</option>
@@ -116,7 +116,7 @@
           id="output"
           placeholder="Select Format and Scope and Output will appear here"
         ></textarea>
-        <input type="button" value="Copy as Text" id="btnCopy" />
+        <input type="button" value="Copy as Text" id="btnCopyAsText" />
         <input type="button" value="Copy as HTML" id="btnCopyAsHTML" />
       </td>
     </tr>
@@ -128,7 +128,7 @@
           value=""
           placeholder="Save Filename: YYYY-MM-DD_hh-mm-ss Get Tabs Infos "
         />
-        <input type="button" value="Save as File" id="btnSave" />
+        <input type="button" value="Save as File" id="btnSaveToFile" />
       </td>
     </tr>
     <tr></tr>

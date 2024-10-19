@@ -19,14 +19,41 @@
   },
 
   "commands": {
-    "copyAsText": {
-      "description": "Copy to clipboard as Text"
+    "0": {
+      "description": "Custom Action 1"
     },
-    "copyAsHTML": {
-      "description": "Copy to clipboard as HTML"
+    "1": {
+      "description": "Custom Action 2"
     },
-    "saveAsFile": {
-      "description": "Save to File"
+    "2": {
+      "description": "Custom Action 3"
+    },
+    "3": {
+      "description": "Custom Action 4"
+    },
+    "4": {
+      "description": "Custom Action 5"
+    },
+    "5": {
+      "description": "Custom Action 6"
+    },
+    "6": {
+      "description": "Custom Action 7"
+    },
+    "7": {
+      "description": "Custom Action 8"
+    },
+    "8": {
+      "description": "Custom Action 9"
+    },
+    "9": {
+      "description": "Custom Action 10"
+    },
+    "10": {
+      "description": "Custom Action 11"
+    },
+    "11": {
+      "description": "Custom Action 12"
     }
   },
   "icons": {
@@ -34,7 +61,12 @@
   },
   "manifest_version": 2,
   "name": "Get Tabs Infos",
+  "options_ui": {
+    "open_in_tab": false,
+    "page": "options.html"
+  },
+
   "description": "Get tab information in a user defined custom format string",
   "permissions": ["tabs", "storage"],
-  "version": "1.11.14"
+  "version": "1.12.14"
 }

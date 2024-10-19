@@ -5,6 +5,10 @@ const extname = manifest.name;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+function getDocElById(id) {
+  return document.getElementById(id);
+}
+
 async function setToStorage(id, value) {
   let obj = {};
   obj[id] = value;
@@ -44,8 +48,6 @@ async function copyToClipboardAsHTML(out) {
     document.getSelection().addRange(range);
     document.execCommand("copy");
   } else {
-    console.debug(out);
-    console.debug(base_span.innerHTML);
     navigator.clipboard.write([
       new ClipboardItem({
         "text/plain": new Blob([out.trim()], {

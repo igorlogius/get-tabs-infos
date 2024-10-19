@@ -1,0 +1,20 @@
+[
+  {
+    "name": "%url"
+  },
+  {
+    "name": "[%title](%url)"
+  },
+  {
+    "name": "<a href=\"%url\">%title</a>"
+  },
+  {
+    "name": "%origin%pathname"
+  },
+  {
+    "name": "[%title](%origin%pathname)"
+  },
+  {
+    "name": "<a href=\"%origin%pathname\">%title</a>"
+  }
+]

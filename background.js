@@ -1,88 +1,60 @@
 /* global browser */
 
-/*
-const manifest = browser.runtime.getManifest();
-const extname = manifest.name;
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+//const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 function iconBlink() {
+  browser.browserAction.setBadgeText({ text: "✅" });
   browser.browserAction.disable();
   setTimeout(() => {
     browser.browserAction.enable();
-  }, 300);
+    browser.browserAction.setBadgeText({ text: null });
+  }, 500);
 }
 
-*/
-
 async function onCommand(cmd) {
-  console.debug(cmd);
+  const shortcutconfig = await getFromStorage("object", "shortcutconfig", null);
 
-  let out = "";
-  const lastSelectedScope = await getFromStorage(
-    "string",
-    "lastSelectedScope",
-    "AllTabs",
-  );
-
-  const lastSelectedFormat = await getFromStorage(
-    "string",
-    "lastSelectedFormat",
-    "%url",
-  );
-
-  switch (lastSelectedScope) {
-    case "AllTabs":
-      out = await getTabsInfos(
-        {
-          url: "<all_urls>",
-          hidden: false,
-          currentWindow: true,
-        },
-        lastSelectedFormat,
-      );
-      break;
-    case "AllTabsAllWindows":
-      out = await tabinfo2clip(
-        {
-          url: "<all_urls>",
-          hidden: false,
-        },
-        lastSelectedFormat,
-      );
-      break;
-    case "SelectedTabsAllWindows":
-      out = await tabinfo2clip(
-        {
-          url: "<all_urls>",
-          hidden: false,
-          highlighted: true,
-        },
-        lastSelectedFormat,
-      );
-      break;
-    case "SelectedTabs":
-      out = await tabinfo2clip(
-        {
-          url: "<all_urls>",
-          hidden: false,
-          highlighted: true,
-          currentWindow: true,
-        },
-        lastSelectedFormat,
-      );
-      break;
+  if (shortcutconfig === null) {
+    return;
   }
-  switch (cmd) {
-    case "copyAsText":
+
+  const out = await getTabsInfos(
+    shortcutconfig[cmd].scope,
+    shortcutconfig[cmd].format,
+  );
+
+  switch (shortcutconfig[cmd].action) {
+    case "ct":
       navigator.clipboard.writeText(out);
       break;
-    case "copyAsHTML":
+    case "ch":
       copyToClipboardAsHTML(out);
       break;
-    case "saveAsFile":
+    case "s":
       saveToFile(out, "");
       break;
   }
+  iconBlink();
 }
 
+async function onInstalled(details) {
+  let tmp;
+  if (details.reason === "install") {
+    tmp = await getFromStorage("object", "formatStrings", []);
+    if (tmp.length < 1) {
+      tmp = await fetch("formatStrings.json");
+      tmp = await tmp.json();
+      await setToStorage("formatStrings", tmp);
+    }
+  } else {
+    tmp = await getFromStorage("object", "placeholder_urls", []);
+    if (Array.isArray(tmp)) {
+      await setToStorage("formatStrings", tmp);
+    }
+  }
+}
+
+browser.browserAction.setBadgeBackgroundColor({ color: "#00000000" });
+
 browser.commands.onCommand.addListener(onCommand);
+browser.runtime.onInstalled.addListener(onInstalled);
 // EOF
