@@ -45,11 +45,6 @@ async function onInstalled(details) {
       tmp = await tmp.json();
       await setToStorage("formatStrings", tmp);
     }
-  } else {
-    tmp = await getFromStorage("object", "placeholder_urls", []);
-    if (Array.isArray(tmp)) {
-      await setToStorage("formatStrings", tmp);
-    }
   }
 }
 
