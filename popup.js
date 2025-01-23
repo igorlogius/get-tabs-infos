@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   getDocElById("btnAddFormat").addEventListener("click", async () => {
-    let newFormat = getDocElById("newFormat").value.trim();
+    let newFormat = getDocElById("newEntry").value.trim();
 
     if (newFormat === "") {
       return;
