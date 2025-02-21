@@ -1,5 +1,16 @@
 /* global browser */
 
+function replacer(match, p1, p2, /* …, */ pN, offset, string, groups) {
+  return ".".repeat(match.length);
+}
+
+function replaceLadingAndTrailingAndMultiSpacesWithDots(str) {
+  str = str.replace(/^\s+/, replacer);
+  str = str.replace(/\s+$/, replacer);
+  str = str.replace(/\s{2,}/, replacer);
+  return str;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   const formatStrings = await getFromStorage("object", "formatStrings", []);
 
@@ -8,7 +19,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   formatStrings.forEach((feed) => {
     Object.keys(feed).forEach((key) => {
       if (key === "name") {
-        formatOptions.add(new Option(feed[key], feed[key]));
+        formatOptions.add(
+          new Option(
+            replaceLadingAndTrailingAndMultiSpacesWithDots(feed[key]),
+            feed[key],
+          ),
+        );
       }
     });
   });
@@ -46,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   getDocElById("btnAddFormat").addEventListener("click", async () => {
-    let newFormat = getDocElById("newEntry").value.trim();
+    let newFormat = getDocElById("newEntry").value;
 
     if (newFormat === "") {
       return;
