@@ -48,7 +48,7 @@ async function copyToClipboardAsHTML(out) {
     document.getSelection().addRange(range);
     document.execCommand("copy");
   } else {
-    navigator.clipboard.write([
+    await navigator.clipboard.write([
       new ClipboardItem({
         "text/plain": new Blob([out.trim()], {
           type: "text/plain",
@@ -167,4 +167,13 @@ function saveToFile(out, saveFilename) {
   );
   a.click();
   a.remove();
+}
+
+function iconBlink() {
+  browser.browserAction.setBadgeText({ text: "✅" });
+  browser.browserAction.disable();
+  setTimeout(() => {
+    browser.browserAction.enable();
+    browser.browserAction.setBadgeText({ text: null });
+  }, 500);
 }

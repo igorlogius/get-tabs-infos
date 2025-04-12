@@ -48,17 +48,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // add UI action-listeners
 
-  getDocElById("btnCopyAsText").addEventListener("click", () => {
+  getDocElById("btnCopyAsText").addEventListener("click", async () => {
     const out = getDocElById("output").value;
-    navigator.clipboard.writeText(out);
+    try {
+      await navigator.clipboard.writeText(out);
+    } catch (e) {
+      console.error(e);
+    }
+    iconBlink();
   });
   getDocElById("btnSaveToFile").addEventListener("click", () => {
     const out = getDocElById("output").value;
     const saveFilename = getDocElById("saveFilename").value;
     saveToFile(out, saveFilename);
+    iconBlink();
   });
-  getDocElById("btnCopyAsHTML").addEventListener("click", () => {
-    copyToClipboardAsHTML(getDocElById("output").value);
+  getDocElById("btnCopyAsHTML").addEventListener("click", async () => {
+    try {
+      await copyToClipboardAsHTML(getDocElById("output").value);
+    } catch (e) {
+      console.error(e);
+    }
+    iconBlink();
   });
 
   getDocElById("btnAddFormat").addEventListener("click", async () => {
