@@ -8,14 +8,7 @@
   "browser_action": {
     "browser_style": true,
     "default_area": "navbar",
-    "default_popup": "popup.html",
-    "theme_icons": [
-      {
-        "light": "dark-256.png",
-        "dark": "icon.png",
-        "size": 256
-      }
-    ]
+    "default_popup": "popup.html"
   },
 
   "commands": {
@@ -66,7 +59,7 @@
     "page": "options.html"
   },
 
-  "description": "Get tab information in a user defined custom format string",
+  "description": "Get tabs information in custom formats",
   "permissions": ["tabs", "storage"],
-  "version": "1.12.19"
+  "version": "1.12.20"
 }
