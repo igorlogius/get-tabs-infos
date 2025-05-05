@@ -1,6 +1,6 @@
 {
   "author": "igorlogius",
-  "homepage_url": "https://github.com/igorlogius",
+  "homepage_url": "https://github.com/igorlogius/get-tabs-infos",
   "background": {
     "scripts": ["utils.js", "background.js"]
   },
@@ -61,5 +61,5 @@
 
   "description": "Get tabs information in custom formats",
   "permissions": ["tabs", "storage"],
-  "version": "1.12.20"
+  "version": "1.12.21"
 }
