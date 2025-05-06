@@ -60,6 +60,6 @@
   },
 
   "description": "Get tabs information in custom formats",
-  "permissions": ["tabs", "storage"],
-  "version": "1.12.21"
+  "permissions": ["clipboardWrite", "tabs", "storage"],
+  "version": "1.12.22"
 }
